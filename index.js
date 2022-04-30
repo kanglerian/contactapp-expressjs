@@ -2,9 +2,11 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const ejs = require('ejs');
+const expressLayouts = require('express-ejs-layouts');
 
 // menggunakan EJS
 app.set('view engine', 'ejs');
+app.use(expressLayouts);
 
 app.get('/', (req,res) => {
    const mahasiswa = [
@@ -23,19 +25,24 @@ app.get('/', (req,res) => {
       nama: "Lerian Febriana",
       title: "Home",
       mahasiswa,
+      layout: 'layouts/main'
    });
 });
 
 app.get('/about', (req,res) => {
-   const title = "About";
-   const nama = "About";
-   res.render('about', {title, nama});
+   res.render('about', {
+      nama: "About",
+      title: "About",
+      layout: 'layouts/main'
+   });
 });
 
 app.get('/contact', (req,res) => {
-   const title = "Contact";
-   const nama = "Contact";
-   res.render('contact', {title, nama});
+   res.render('contact', {
+      nama: "Contact",
+      title: "Contact",
+      layout: 'layouts/main'
+   });
 });
 
 app.get('/produk/:id', (req,res) => {
