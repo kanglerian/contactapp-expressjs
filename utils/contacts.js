@@ -18,10 +18,22 @@ const loadContact = () => {
     return contacts;
 }
 
-const findContact = (id) => {
+const findContact = (noreg) => {
     const contacts = loadContact();
-    const contact = contacts.find((contact) => contact.id === id);
+    const contact = contacts.find((contact) => contact.noreg === noreg);
     return contact;
 }
 
-module.exports = { loadContact, findContact }
+// Menuliskan, menimpa file contacts.json dengan data yang baru
+const saveContacts = (contacts) => {
+    fs.writeFileSync('data/contacts.json', JSON.stringify(contacts));
+}
+
+// Menambah contact baru
+const addContact = (contact) => {
+    const contacts = loadContact();
+    contacts.push(contact);
+    saveContacts(contacts);
+}
+
+module.exports = { loadContact, findContact, addContact }

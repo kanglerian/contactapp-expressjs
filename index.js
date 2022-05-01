@@ -1,13 +1,16 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
+const { redirect } = require('express/lib/response');
 const app = express();
 const port = 3000;
-const { loadContact, findContact } = require('./utils/contacts');
+const { loadContact, findContact, addContact } = require('./utils/contacts');
 
 // menggunakan EJS
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.use(express.static('public'));
+
+app.use(express.urlencoded());
 
 app.get('/', (req,res) => {
    const mahasiswa = [
@@ -48,8 +51,21 @@ app.get('/contact', (req,res) => {
    });
 });
 
-app.get('/contact/:id', (req,res) => {
-   const contact = findContact(req.params.id);
+app.get('/contact/add', (req,res) => {
+   res.render('tambah', {
+      nama: "Tambah Contact",
+      title: "Tambah Contact",
+      layout: 'layouts/main'
+   });
+});
+
+app.post('/contact', (req, res) => {
+   addContact(req.body);
+   res.redirect('/contact');
+});
+
+app.get('/contact/:noreg', (req,res) => {
+   const contact = findContact(req.params.noreg);
    res.render('detail', {
       nama: "Detail Contact",
       title: "Detail Contact",
