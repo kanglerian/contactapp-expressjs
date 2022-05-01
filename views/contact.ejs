@@ -8,6 +8,9 @@
             <p class="lead">
                 <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
             </p>
+            <% contacts.forEach( contact => { %>
+                <a href="<%= contact.url %>" class="btn btn-primary btn-sm" target="_blank"><%= contact.nama %></a>
+            <% }) %> 
         </div>
     </div>
 </section>
