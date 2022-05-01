@@ -1,16 +1,42 @@
 <section>
     <div class="container">
-        <div class="jumbotron">
-            <h1 class="display-4"><%= nama %></h1>
-            <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-            <hr class="my-4">
-            <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-            </p>
-            <% contacts.forEach( contact => { %>
-                <a href="<%= contact.url %>" class="btn btn-primary btn-sm" target="_blank"><%= contact.nama %></a>
-            <% }) %> 
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="my-3"><b>Daftar Contact</b></h2>
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nama</th>
+                        <th scope="col">No HP</th>
+                        <th scope="col">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    <% if (contacts.length === 0) { %>
+                      <tr>
+                        <td colspan="4">
+                          <div class="alert alert-danger font-weight-bold" role="alert">
+                            Data contact tidak ada
+                          </div>
+                        </td>
+                      </tr>
+                    <% } else { %>
+                      <% let no = 1; %>
+                      <% contacts.forEach( contact => { %> 
+                        <tr>
+                          <th scope="row"><%= no++ %></th>
+                          <td><%= contact.nama %></td>
+                          <td><%= contact.nohp %></td>
+                          <td>
+                              <a href="/contact/<%= contact.id %>" class="btn btn-success badge rounded-pill">detail</a>
+                          </td>
+                        </tr>
+                      <% }) %> 
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </section>

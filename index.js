@@ -1,25 +1,13 @@
 const express = require('express');
+const expressLayouts = require('express-ejs-layouts');
 const app = express();
 const port = 3000;
-const ejs = require('ejs');
-const expressLayouts = require('express-ejs-layouts');
-const morgan = require('morgan');
+const { loadContact, findContact } = require('./utils/contacts');
 
 // menggunakan EJS
 app.set('view engine', 'ejs');
-
-// Third-party Middleware
 app.use(expressLayouts);
-app.use(morgan('dev'));
-
-// Express Static Built-in Middleware
 app.use(express.static('public'));
-
-// Application level middleware
-app.use((req,res,next) => {
-   console.log(`Time: ${Date.now()}`);
-   next();
-});
 
 app.get('/', (req,res) => {
    const mahasiswa = [
@@ -51,26 +39,23 @@ app.get('/about', (req,res) => {
 });
 
 app.get('/contact', (req,res) => {
-   const contacts = [
-      {
-         nama: "Instagram",
-         url: "https://instagram.com/kanglerian"
-      },
-      {
-         nama: "Facebook",
-         url: "https://facebook.com/kanglerian"
-      }
-   ];
+   const contacts = loadContact();
    res.render('contact', {
       nama: "Contact",
       title: "Contact",
-      contacts,
-      layout: 'layouts/main'
+      layout: 'layouts/main',
+      contacts
    });
 });
 
-app.get('/produk/:id', (req,res) => {
-   res.send(`Product ID: ${req.params.id} <br> Category: ${req.query.category}`);
+app.get('/contact/:id', (req,res) => {
+   const contact = findContact(req.params.id);
+   res.render('detail', {
+      nama: "Detail Contact",
+      title: "Detail Contact",
+      layout: 'layouts/main',
+      contact
+   });
 });
 
 app.use('/', (req,res) => {
