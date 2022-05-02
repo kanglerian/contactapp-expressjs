@@ -4,6 +4,11 @@
             <div class="col-md-8">
                 <h2 class="my-3"><b>Daftar Contact</b></h2>
                 <a href="/contact/add" class="btn btn-primary btn-sm mb-3">Tambah data</a>
+
+                <% if (msg.length !== 0) { %>
+                  <div class="alert alert-success" role="alert"><%= msg %></div>
+                <% } %>
+
                 <table class="table table-striped">
                     <thead>
                       <tr>

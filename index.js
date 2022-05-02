@@ -5,7 +5,19 @@ const app = express();
 const port = 3000;
 const { loadContact, findContact, addContact, cekDuplikat } = require('./utils/contacts');
 const { body, validationResult, check } = require('express-validator');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
 
+// Konfigurasi flash
+app.use(cookieParser('secret'));
+app.use(session({
+   cookie: {maxAge: 6000},
+   secret: 'secret',
+   resave: true,
+   saveUninitialized: true
+}));
+app.use(flash());
 
 // menggunakan EJS
 app.set('view engine', 'ejs');
@@ -49,7 +61,8 @@ app.get('/contact', (req,res) => {
       nama: "Contact",
       title: "Contact",
       layout: 'layouts/main',
-      contacts
+      contacts,
+      msg: req.flash('msg'),
    });
 });
 
@@ -82,6 +95,7 @@ app.post('/contact', [
       });
    } else {
       addContact(req.body);
+      req.flash('msg','Data kontak berhasil ditambahkan!');
       res.redirect('/contact');
    }
 });
