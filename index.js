@@ -3,14 +3,16 @@ const expressLayouts = require('express-ejs-layouts');
 const { redirect } = require('express/lib/response');
 const app = express();
 const port = 3000;
-const { loadContact, findContact, addContact } = require('./utils/contacts');
+const { loadContact, findContact, addContact, cekDuplikat } = require('./utils/contacts');
+const { body, validationResult, check } = require('express-validator');
+
 
 // menggunakan EJS
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.use(express.static('public'));
 
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended:true}));
 
 app.get('/', (req,res) => {
    const mahasiswa = [
@@ -59,9 +61,29 @@ app.get('/contact/add', (req,res) => {
    });
 });
 
-app.post('/contact', (req, res) => {
-   addContact(req.body);
-   res.redirect('/contact');
+app.post('/contact', [
+   check('email','Email tidak benar!').isEmail(),
+   check('nohp', 'No HP tidak benar').isMobilePhone('id-ID'),
+   body('noreg').custom((value) => {
+      const duplikat = cekDuplikat(value);
+      if(duplikat){
+         throw new Error('No Registrasi sudah terdaftar!');
+      }
+      return true;
+   }),
+], (req, res) => {
+   const errors = validationResult(req);
+   if(!errors.isEmpty()){
+      // return res.status(400).json({ errors: errors.array() });
+      res.render('tambah',{
+         title: "Tambah data kontak",
+         layout: "layouts/main",
+         errors: errors.array(),
+      });
+   } else {
+      addContact(req.body);
+      res.redirect('/contact');
+   }
 });
 
 app.get('/contact/:noreg', (req,res) => {
