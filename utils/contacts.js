@@ -42,4 +42,21 @@ const cekDuplikat = (noreg) => {
     return contacts.find((contact) => contact.noreg === noreg);
 }
 
-module.exports = { loadContact, findContact, addContact, cekDuplikat }
+// Delete contact
+const deleteContact = (noreg) => {
+    const contacts = loadContact();
+    const filteredContacts = contacts.filter((contact) => contact.noreg !== noreg);
+    saveContacts(filteredContacts);
+}
+
+// Update contacts
+const updateContacts = (contactBaru) => {
+    const contacts = loadContact();
+    // hilangkankontak lama yg noreg sama dgn oldreg
+    const filteredContacts = contacts.filter((contact) => contact.noreg !== contactBaru.oldnoreg);
+    delete contactBaru.oldnoreg;
+    filteredContacts.push(contactBaru);
+    saveContacts(filteredContacts);
+}
+
+module.exports = { loadContact, findContact, addContact, cekDuplikat, deleteContact, updateContacts }

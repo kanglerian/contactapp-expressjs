@@ -14,7 +14,9 @@
                       <h6 class="card-subtitle mb-2 text-muted"><%= contact.nohp %></h6>
                       <p class="card-text"><%= contact.noreg %></p>
                       <p class="card-text"><%= contact.email %></p>
-                      <a href="/contact" class="card-link">&laquo; Kembali ke daftar contact</a>
+                      <a href="/contact/edit/<%= contact.noreg %>" class="btn btn-warning badge">ubah</a>
+                      <a href="/contact/delete/<%= contact.noreg %>" class="btn btn-danger badge" onclick="confirm('Yakin?');">hapus</a>
+                      <a href="/contact" class="card-link d-block mt-3">&laquo; Kembali ke daftar contact</a>
                     </div>
                 </div>
                 <% } %> 
